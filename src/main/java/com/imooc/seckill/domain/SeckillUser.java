@@ -5,6 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 /**
+ * 用户表
  * @author youyusong
  * @date 2018/12/27
  */

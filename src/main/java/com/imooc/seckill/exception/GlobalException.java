@@ -3,6 +3,7 @@ package com.imooc.seckill.exception;
 import com.imooc.seckill.result.CodeMsg;
 
 /**
+ * 异常处理
  * @author youyusong
  * @date 2018/12/27
  */

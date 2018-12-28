@@ -17,6 +17,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * 用户登录 service
  * @author youyusong
  * @date 2018/12/27
  */
@@ -24,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 public class SeckillUserService {
 
-    public static final String COOKI_NAME_TOKEN = "token";
+    public static final String COOKIE_NAME_TOKEN = "token";
 
     @Resource
     SeckillUserDao seckillUserDao;
@@ -36,6 +37,15 @@ public class SeckillUserService {
         return seckillUserDao.getById(id);
     }
 
+    public SeckillUser getTokenType(HttpServletResponse response, String token) {
+        SeckillUser user = redisService.get(SeckillUserKey.token, token, SeckillUser.class);
+
+        if (user != null) {
+            addCookie(response, token, user);
+        }
+
+        return user;
+    }
 
     public boolean login(HttpServletResponse response, LoginVo loginVo) {
         if(loginVo == null) {
@@ -64,7 +74,7 @@ public class SeckillUserService {
 
     private void addCookie(HttpServletResponse response, String token, SeckillUser user) {
         redisService.set(SeckillUserKey.token, token, user);
-        Cookie cookie = new Cookie(COOKI_NAME_TOKEN, token);
+        Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
         cookie.setMaxAge(SeckillUserKey.token.expireSeconds());
         cookie.setPath("/");
         response.addCookie(cookie);

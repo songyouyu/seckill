@@ -2,7 +2,6 @@ package com.imooc.seckill.service;
 
 import com.imooc.seckill.dao.UserDao;
 import com.imooc.seckill.domain.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

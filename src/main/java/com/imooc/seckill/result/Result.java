@@ -1,6 +1,7 @@
 package com.imooc.seckill.result;
 
 /**
+ * 通用返回结果
  * @author youyusong
  * @date 2018/12/27
  */

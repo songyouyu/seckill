@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 /**
+ * 用户登录 controller
  * @author youyusong
  * @date 2018/12/27
  */
