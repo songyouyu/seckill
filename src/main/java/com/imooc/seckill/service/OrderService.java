@@ -4,6 +4,8 @@ import com.imooc.seckill.dao.OrderDao;
 import com.imooc.seckill.domain.OrderInfo;
 import com.imooc.seckill.domain.SeckillOrder;
 import com.imooc.seckill.domain.SeckillUser;
+import com.imooc.seckill.redis.OrderKey;
+import com.imooc.seckill.redis.RedisService;
 import com.imooc.seckill.vo.GoodsVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,12 @@ public class OrderService {
 
     @Resource
     private OrderDao orderDao;
+    @Resource
+    private RedisService redisService;
+
+    public OrderInfo getOrderById(long orderId) {
+        return orderDao.getOrderById(orderId);
+    }
 
     /**
      * 根据商品和用户 id 获取秒杀订单
@@ -29,7 +37,7 @@ public class OrderService {
      * @return
      */
     public SeckillOrder getSeckillOrderByUserIdGoodsId(Long userId, long goodsId) {
-        return orderDao.getSeckillOrderByUserIdGoodsId(userId, goodsId);
+        return redisService.get(OrderKey.getSeckillOrderByUidGid, ""+userId+"_"+goodsId, SeckillOrder.class);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -46,11 +54,17 @@ public class OrderService {
         orderInfo.setUserId(user.getId());
         long orderId = orderDao.insert(orderInfo);
         SeckillOrder seckillOrder = new SeckillOrder();
+        // 此数据表中添加了唯一联合索引（user_id, goods_id）,防止一个用户同时下两个订单
         seckillOrder.setGoodsId(goods.getId());
         seckillOrder.setOrderId(orderId);
         seckillOrder.setUserId(user.getId());
         orderDao.insertSeckillOrder(seckillOrder);
+
+        redisService.set(OrderKey.getSeckillOrderByUidGid, ""+user.getId()+"_"+goods.getId(), seckillOrder);
+
         return orderInfo;
     }
+
+
 
 }

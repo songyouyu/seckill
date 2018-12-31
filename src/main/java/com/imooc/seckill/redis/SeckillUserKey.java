@@ -12,4 +12,9 @@ public class SeckillUserKey extends BasePrefix {
         super(expireSeconds, prefix);
     }
     public static SeckillUserKey token = new SeckillUserKey(TOKEN_EXPIRE, "tk");
+
+    /**
+     * 对象缓存，希望它永久有效
+     */
+    public static SeckillUserKey getById = new SeckillUserKey(0, "id");
 }
