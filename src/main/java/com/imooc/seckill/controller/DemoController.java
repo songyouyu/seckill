@@ -1,6 +1,7 @@
 package com.imooc.seckill.controller;
 
 import com.imooc.seckill.domain.User;
+import com.imooc.seckill.rabbitmq.MQSender;
 import com.imooc.seckill.redis.RedisService;
 import com.imooc.seckill.redis.UserKey;
 import com.imooc.seckill.result.CodeMsg;
@@ -25,6 +26,37 @@ public class DemoController {
     private UserService userService;
     @Resource
     private RedisService redisService;
+    @Resource
+    private MQSender sender;
+
+    @RequestMapping("/mq")
+    @ResponseBody
+    public Result<String> mq() {
+		sender.send("hello,imooc");
+        return Result.success("Hello，world");
+    }
+
+    @RequestMapping("/mq/topic")
+    @ResponseBody
+    public Result<String> topic() {
+		sender.sendTopic("hello,imooc");
+        return Result.success("Hello，world");
+    }
+
+    @RequestMapping("/mq/fanout")
+    @ResponseBody
+    public Result<String> fanout() {
+		sender.sendFanout("hello,imooc");
+        return Result.success("Hello，world");
+    }
+
+    @RequestMapping("/mq/header")
+    @ResponseBody
+    public Result<String> header() {
+		sender.sendHeader("hello,imooc");
+        return Result.success("Hello，world");
+    }
+
 
     @RequestMapping("/hello")
     @ResponseBody
