@@ -65,7 +65,7 @@ public class SeckillUserService {
         return true;
     }
 
-    public SeckillUser getTokenType(HttpServletResponse response, String token) {
+    public SeckillUser getByToken(HttpServletResponse response, String token) {
         SeckillUser user = redisService.get(SeckillUserKey.token, token, SeckillUser.class);
 
         if (user != null) {
