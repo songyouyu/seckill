@@ -52,11 +52,11 @@ public class OrderService {
         orderInfo.setOrderChannel(1);
         orderInfo.setStatus(0);
         orderInfo.setUserId(user.getId());
-        long orderId = orderDao.insert(orderInfo);
+        orderDao.insert(orderInfo);
         SeckillOrder seckillOrder = new SeckillOrder();
         // 此数据表中添加了唯一联合索引（user_id, goods_id）,防止一个用户同时下两个订单
         seckillOrder.setGoodsId(goods.getId());
-        seckillOrder.setOrderId(orderId);
+        seckillOrder.setOrderId(orderInfo.getId());
         seckillOrder.setUserId(user.getId());
         orderDao.insertSeckillOrder(seckillOrder);
 
